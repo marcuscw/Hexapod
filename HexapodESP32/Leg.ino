@@ -1,6 +1,6 @@
 #include <math.h>
 
-#include "dataStructs.h"
+#include "structsAndFuncts.h"
 
 
 
