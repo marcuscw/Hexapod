@@ -1,4 +1,4 @@
-#include "structsAndFuncts.h"
+#include "StructsAndFuncts.h"
 
 
 void DetectLowVoltage(int voltagePin, int alarmPin){
@@ -9,6 +9,7 @@ void DetectLowVoltage(int voltagePin, int alarmPin){
   float currentVoltage = analogRead(voltagePin);  // returns a value between 0 and 4095 where 0 is 0V and 4095 is 3.3V
   currentVoltage = currentVoltage * (3.3/4095) * 2;  // scales the value to a voltage
 
+  Serial.print(currentVoltage);
   
   if (currentVoltage <= 5.6) {
     digitalWrite(alarmPin, HIGH);
@@ -23,5 +24,9 @@ void DetectLowVoltage(int voltagePin, int alarmPin){
     delay(200);
     digitalWrite(alarmPin, LOW);
     delay(500);
+  } 
+  else
+  {
+    digitalWrite(alarmPin, LOW);
   }
 }

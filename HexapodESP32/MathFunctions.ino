@@ -1,4 +1,4 @@
-#include "structsAndFuncts.h"
+#include "StructsAndFuncts.h"
 
 void matmul(float A[4][4], float B[4][4], float C[4][4]) { 
  /*  
@@ -36,3 +36,32 @@ void matmul(float A[4][4], float B[4][4], float C[4][4]) {
   C[3][2] = A[3][0]*B[0][2] + A[3][1]*B[1][2] + A[3][2]*B[2][2] + A[3][3]*B[3][2];
   C[3][3] = A[3][0]*B[0][3] + A[3][1]*B[1][3] + A[3][2]*B[2][3] + A[3][3]*B[3][3];
 }
+
+void PrintMat(float mat[4][4]){
+  for (int i = 0; i < 4; i++) {
+    for (int j = 0  ; j < 4; j++) {
+      Serial.print(mat[i][j]);
+      Serial.print("   ");
+    }
+    Serial.println("");
+  }
+  Serial.println("");
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
