@@ -1,11 +1,16 @@
+#include <math.h>
+
+#include "dataStructs.h"
 
 
-void setup()
+
+Leg::Leg(int controlPin)
 {
-  
+  ctrlPin = controlPin;
 }
 
-void loop()
+void Leg::Rotate(float angleDeg)
 {
-
+  float pwm = map(angleDeg, -90, 90, 10, 450);
+  HCPCA9685.Servo(ctrlPin, pwm);
 }
