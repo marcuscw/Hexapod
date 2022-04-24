@@ -1,6 +1,7 @@
 #include "StructsAndFuncts.h"
 
-void MatMul(float A[4][4], float B[4][4], float C[4][4]) { 
+void MatMul(float A[4][4], float B[4][4], float C[4][4]) 
+{ 
  /*  
  * This function will multiply two homogeneous matricies ('A' and 'B') and the product write onto a variable ('C')
  * It is hard coded as the matricies will be constant and it is more optimal than using loops
@@ -37,10 +38,13 @@ void MatMul(float A[4][4], float B[4][4], float C[4][4]) {
   C[3][3] = A[3][0]*B[0][3] + A[3][1]*B[1][3] + A[3][2]*B[2][3] + A[3][3]*B[3][3];
 }
 
-void PrintMat(float mat[4][4]){
-  for (int i = 0; i < 4; i++) {
-    for (int j = 0  ; j < 4; j++) {
-      Serial.print(mat[i][j]);
+void PrintMat(float mat[3][4][4])
+{
+  for (int i = 0; i < 4; i++)
+  {
+    for (int j = 0  ; j < 4; j++) 
+    {
+      Serial.print(mat[0][i][j]);
       Serial.print("   ");
     }
     Serial.println("");

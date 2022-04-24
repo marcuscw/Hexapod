@@ -13,9 +13,7 @@ int voltPin = 34;
 int alarmPin = 19;
 /////////////////////////
 
-float MATa[4][4] = { {1,2,3,4}, {1,2,3,4}, {2,4,6,8}, {2,4,6,8} };
-float MATb[4][4] = { {2,4,6,8}, {2,4,6,8}, {1,2,3,4}, {1,2,3,4} };
-float MATc[4][4];
+Leg leg1({-PI/2, PI, 0},{50, 110.3, 110},{0, 0, 0});
 
 void setup()
 {
@@ -31,6 +29,8 @@ void setup()
   // Initialise the pins for reading the battery voltage and the buzzer connected to it
   pinMode(voltPin, INPUT);
   pinMode(alarmPin, OUTPUT);
+
+  leg1.GenerateDvm();
 }
 
 
@@ -38,5 +38,9 @@ void loop()
 {
   DetectLowVoltage(voltPin, alarmPin);
 
-  
+  leg1.UpdateTheta(0, 0);
+  leg1.UpdateTheta(1, 0);
+  leg1.UpdateTheta(2, 0);
+
+  leg1.updateFK();
 }

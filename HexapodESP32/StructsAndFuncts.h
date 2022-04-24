@@ -18,13 +18,13 @@ typedef struct {float f[3];} FLOAT3;
 
 struct Leg
 {
-  Leg(FLOAT3 _a, FLOAT3 _r, FLOAT3 _d)
+  Leg(FLOAT3 _alpha, FLOAT3 _r, FLOAT3 _d)
   {
     for (int i=0; i<3; i++)
     {
-      a[i] = _a.f[i];
-      sina[i] = sin(a[i]);
-      cosa[i] = cos(a[i]);
+      alpha[i] = _alpha.f[i];
+      sina[i] = sin(alpha[i]);
+      cosa[i] = cos(alpha[i]);
       
       r[i] = _r.f[i];
       d[i] = _d.f[i];
@@ -34,7 +34,7 @@ struct Leg
   //////////////////////////
   float theta[3];
   
-  float a[3];
+  float alpha[3];
   float cosa[3];
   float sina[3];
   
@@ -60,7 +60,8 @@ struct Leg
                          {0,0,0,1}},
                         };
 
-  void GenerateDvm() {
+  void GenerateDvm() 
+  {
     // only used at the start to put in the variables that will stay the same throught all. Like d and a and r
 
     dvm[0][2][3] = d[0];
@@ -69,7 +70,8 @@ struct Leg
     
   }
   
-  void UpdateTheta(int leg, float newTheta) {
+  void UpdateTheta(int joint, float newTheta) 
+  {
     float cost = cos(newTheta);
     float sint = sin(newTheta);
 
@@ -82,19 +84,58 @@ struct Leg
     }
     */
 
-    dvm[leg][0][0] = cost;
-    dvm[leg][0][1] = -sint * cosa[leg];
-    dvm[leg][0][2] = sint * sina[leg];
-    dvm[leg][0][3] = r[leg] * cost;
+    dvm[joint][0][0] = cost;
+    dvm[joint][0][1] = -sint * cosa[joint];
+    dvm[joint][0][2] = sint * sina[joint];
+    dvm[joint][0][3] = r[joint] * cost;
 
-    dvm[leg][1][0] = sint;
-    dvm[leg][1][1] = cost * cosa[leg];
-    dvm[leg][1][2] = -cost * sina[leg];
-    dvm[leg][1][3] = r[leg] * sint;
+    dvm[joint][1][0] = sint;
+    dvm[joint][1][1] = cost * cosa[joint];
+    dvm[joint][1][2] = -cost * sina[joint];
+    dvm[joint][1][3] = r[joint] * sint;
 
- // dvm[leg][2][0]    doesnt involve theta therefore stays the same 
-    dvm[leg][2][1] = sina[leg];
-    dvm[leg][2][2] = cosa[leg];
- // dvm[leg][2][3]    doesnt involve theta therefore stays the same, same thing with the next row
+ // dvm[joint][2][0]    doesnt involve theta therefore stays the same 
+    dvm[joint][2][1] = sina[joint];
+    dvm[joint][2][2] = cosa[joint];
+ // dvm[joint][2][3]    doesnt involve theta therefore stays the same, same thing with the next row
+  }
+
+  void updateFK()
+  {
+    float prodA[4][4];
+
+    float j1[4][4];
+    float j2[4][4];
+    float j3[4][4];
+
+    for (int i = 0; i < 4; i++)
+    {
+      for (int j = 0  ; j < 4; j++) 
+      {
+        j1[i][j] = dvm[0][i][j];
+      }
+    }
+    
+    for (int i = 0; i < 4; i++)
+    {
+      for (int j = 0  ; j < 4; j++) 
+      {
+        j1[i][j] = dvm[1][i][j];
+      }
+    }
+    
+    for (int i = 0; i < 4; i++)
+    {
+      for (int j = 0  ; j < 4; j++) 
+      {
+        j1[i][j] = dvm[2][i][j];
+      }
+    }
+    
+    // dvm 1 stays the same
+
+    MatMul(j2, j1, prodA);
+
+    PrintMat(prodA);
   }
 };
