@@ -1,6 +1,6 @@
 #include "StructsAndFuncts.h"
 
-void matmul(float A[4][4], float B[4][4], float C[4][4]) { 
+void MatMul(float A[4][4], float B[4][4], float C[4][4]) { 
  /*  
  * This function will multiply two homogeneous matricies ('A' and 'B') and the product write onto a variable ('C')
  * It is hard coded as the matricies will be constant and it is more optimal than using loops
