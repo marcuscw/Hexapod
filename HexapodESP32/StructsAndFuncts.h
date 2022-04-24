@@ -43,30 +43,27 @@ struct Leg
   //////////////////////////  
 
 
-  float dvm[3][4][4] = {
-                        {{0,0,0,0},
-                         {0,0,0,0},
-                         {0,0,0,0},
-                         {0,0,0,1}},
-                         
-                        {{0,0,0,0},
-                         {0,0,0,0},
-                         {0,0,0,0},
-                         {0,0,0,1}},
-                         
-                        {{0,0,0,0},
-                         {0,0,0,0},
-                         {0,0,0,0},
-                         {0,0,0,1}},
-                        };
+
+float dvm1[4][4] = {{0,0,0,0},
+                     {0,0,0,0},
+                     {0,0,0,0},
+                     {0,0,0,1}};
+float dvm2[4][4] = {{0,0,0,0},
+                     {0,0,0,0},
+                     {0,0,0,0},
+                     {0,0,0,1}};
+float dvm3[4][4] = {{0,0,0,0},
+                     {0,0,0,0},
+                     {0,0,0,0},
+                     {0,0,0,1}};
 
   void GenerateDvm() 
   {
     // only used at the start to put in the variables that will stay the same throught all. Like d and a and r
 
-    dvm[0][2][3] = d[0];
-    dvm[1][2][3] = d[1];
-    dvm[2][2][3] = d[2];
+    dvm1[2][3] = d[0];
+    dvm2[2][3] = d[1];
+    dvm3[2][3] = d[2];
     
   }
   
@@ -75,67 +72,65 @@ struct Leg
     float cost = cos(newTheta);
     float sint = sin(newTheta);
 
-    /*
-    float newDvm[4][4] = {
-      {cost, -sint * cosa, sint * sina, r * cost},
-      {sint, cost * cosa, -cost * sina, r * sint},
-      {0, sina, cosa, d},
-      {0, 0, 0, 1}
+    switch (joint)
+    {
+      case 0:
+        dvm1[0][0] = cost;
+        dvm1[0][1] = -sint * cosa[joint];
+        dvm1[0][2] = sint * sina[joint];
+        dvm1[0][3] = r[joint] * cost;
+    
+        dvm1[1][0] = sint;
+        dvm1[1][1] = cost * cosa[joint];
+        dvm1[1][2] = -cost * sina[joint];
+        dvm1[1][3] = r[joint] * sint;
+    
+     // dvm1[2][0]    doesnt involve theta therefore stays the same 
+        dvm1[2][1] = sina[joint];
+        dvm1[2][2] = cosa[joint];
+     // dvm1[2][3]    doesnt involve theta therefore stays the same, same thing with the next row
+      break;
+      case 1:
+        dvm2[0][0] = cost;
+        dvm2[0][1] = -sint * cosa[joint];
+        dvm2[0][2] = sint * sina[joint];
+        dvm2[0][3] = r[joint] * cost;
+    
+        dvm2[1][0] = sint;
+        dvm2[1][1] = cost * cosa[joint];
+        dvm2[1][2] = -cost * sina[joint];
+        dvm2[1][3] = r[joint] * sint;
+    
+     // dvm2[2][0]    doesnt involve theta therefore stays the same 
+        dvm2[2][1] = sina[joint];
+        dvm2[2][2] = cosa[joint];
+     // dvm2[2][3]    doesnt involve theta therefore stays the same, same thing with the next row
+      break;
+      case 2:
+        dvm3[0][0] = cost;
+        dvm3[0][1] = -sint * cosa[joint];
+        dvm3[0][2] = sint * sina[joint];
+        dvm3[0][3] = r[joint] * cost;
+    
+        dvm3[1][0] = sint;
+        dvm3[1][1] = cost * cosa[joint];
+        dvm3[1][2] = -cost * sina[joint];
+        dvm3[1][3] = r[joint] * sint;
+    
+     // dvm3[2][0]    doesnt involve theta therefore stays the same 
+        dvm3[2][1] = sina[joint];
+        dvm3[2][2] = cosa[joint];
+     // dvm3[2][3]    doesnt involve theta therefore stays the same, same thing with the next row
+      break;
     }
-    */
-
-    dvm[joint][0][0] = cost;
-    dvm[joint][0][1] = -sint * cosa[joint];
-    dvm[joint][0][2] = sint * sina[joint];
-    dvm[joint][0][3] = r[joint] * cost;
-
-    dvm[joint][1][0] = sint;
-    dvm[joint][1][1] = cost * cosa[joint];
-    dvm[joint][1][2] = -cost * sina[joint];
-    dvm[joint][1][3] = r[joint] * sint;
-
- // dvm[joint][2][0]    doesnt involve theta therefore stays the same 
-    dvm[joint][2][1] = sina[joint];
-    dvm[joint][2][2] = cosa[joint];
- // dvm[joint][2][3]    doesnt involve theta therefore stays the same, same thing with the next row
   }
 
   void updateFK()
   {
-    float prodA[4][4];
-
-    float j1[4][4];
-    float j2[4][4];
-    float j3[4][4];
-
-    for (int i = 0; i < 4; i++)
-    {
-      for (int j = 0  ; j < 4; j++) 
-      {
-        j1[i][j] = dvm[0][i][j];
-      }
-    }
     
-    for (int i = 0; i < 4; i++)
-    {
-      for (int j = 0  ; j < 4; j++) 
-      {
-        j1[i][j] = dvm[1][i][j];
-      }
-    }
-    
-    for (int i = 0; i < 4; i++)
-    {
-      for (int j = 0  ; j < 4; j++) 
-      {
-        j1[i][j] = dvm[2][i][j];
-      }
-    }
-    
-    // dvm 1 stays the same
+    MatMul(dvm2, dvm1, dvm2);
+    MatMul(dvm3, dvm2, dvm3);
 
-    MatMul(j2, j1, prodA);
-
-    PrintMat(prodA);
+    PrintMat(dvm3);
   }
 };
