@@ -15,6 +15,11 @@ int alarmPin = 19;
 
 Leg leg1({-PI/2, PI, 0},{50, 110.3, 110},{0, 0, 0});
 
+
+
+
+float val;
+
 void setup()
 {
   Serial.begin(19200);
@@ -36,11 +41,15 @@ void setup()
 
 void loop()
 {
+  while (Serial.available() == 0) {}
+
+  val = Serial.parseFloat() * (PI/180);  
+  
   DetectLowVoltage(voltPin, alarmPin);
 
-  leg1.UpdateTheta(0, 0);
+  leg1.UpdateTheta(0, val);
   leg1.UpdateTheta(1, 0);
   leg1.UpdateTheta(2, 0);
 
-  leg1.updateFK();
+  leg1.CalcFK();
 }

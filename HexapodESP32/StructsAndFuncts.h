@@ -57,6 +57,12 @@ float dvm3[4][4] = {{0,0,0,0},
                      {0,0,0,0},
                      {0,0,0,1}};
 
+float pos1[3] = {0,0,0};
+float pos2[3] = {0,0,0};
+float pos3[3] = {0,0,0};
+
+float target[3] = {270.3,0,0};
+
   void GenerateDvm() 
   {
     // only used at the start to put in the variables that will stay the same throught all. Like d and a and r
@@ -125,12 +131,67 @@ float dvm3[4][4] = {{0,0,0,0},
     }
   }
 
-  void updateFK()
+  void CalcFK()
   {
+    /*
+     * calculates the forward kinematics for the leg
+     */
     
-    MatMul(dvm2, dvm1, dvm2);
-    MatMul(dvm3, dvm2, dvm3);
+    float prod1[4][4];
+    float prod2[4][4];
+    
+    pos1[0] = dvm1[0][3];
+    pos1[1] = dvm1[1][3];
+    pos1[2] = dvm1[2][3];
+    
+    MatMul(dvm2, dvm1, prod1);
+    pos2[0] = prod1[0][3];
+    pos2[1] = prod1[1][3];
+    pos2[2] = prod1[2][3];
+    
+    MatMul(dvm3, prod1, prod2);
+    pos3[0] = prod2[0][3];
+    pos3[1] = prod2[1][3];
+    pos3[2] = prod2[2][3];
 
-    PrintMat(dvm3);
+/*
+    Serial.print(pos3[0]);
+    Serial.print(", ");
+    Serial.print(pos3[1]);
+    Serial.print(", ");
+    Serial.print(pos3[2]);
+    Serial.println(" ");
+*/
+  }
+
+  void CalcIK()
+  {
+  
+    /*
+     * calculates inverse kinematics analytically
+     */
+
+    float r1 = r[0];
+    float r2 = r[1];
+    float r3 = r[2];
+  
+    float l1 = sqrt(pow(target[0] , 2) + pow(target[2] , 2)) - r1;
+    float l2 = target[2];
+    float l3 = sqrt(pow(l1 , 2) + pow(l2 , 2));
+  
+    float phi1 = acos((pow(r2 , 2) + pow(l3 , 2) - pow(r3 , 2)) / (2 * r2 * l3));
+    float phi2 = atan2(l2, l1);
+    float phi3 = acos((pow(r3 , 2) + pow(r2 , 2) - pow(l3 , 2)) / (2 * r3 * r2));
+  
+    float theta1 = atan2(target[1], target[0]); // REVISE IK REVISE IK REVISE IK
+    float theta2 = (phi1 + phi2);
+    float theta3 = (PI - phi3);
+
+    Serial.print(theta1);
+    Serial.print(" ");
+    Serial.print(theta2);
+    Serial.print(" ");
+    Serial.print(theta3);
+    Serial.println(" ");
   }
 };
