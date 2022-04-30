@@ -13,7 +13,7 @@ int voltPin = 34;
 int alarmPin = 19;
 /////////////////////////
 
-Leg leg1({-PI/2, PI, 0},{50, 110.3, 110},{0, 0, 0});
+Leg leg1({-PI/2, PI, 0},{50, 110.3, 110},{0, 0, 0}, {29,30,31});
 
 
 
@@ -41,7 +41,7 @@ void setup()
 
 void loop()
 {
-  /*
+  
   while (Serial.available() == 0) {}
 
   val = Serial.parseFloat(); // * (PI/180);  
@@ -52,9 +52,7 @@ void loop()
   //leg1.UpdateTheta(1, 0);
   //leg1.UpdateTheta(2, 0);
 
-  //leg1.target[0] = val;
+  leg1.target[0] = val;
   leg1.CalcIK();
-  */
-
-  RotateJoint(16, 115);
+  
 }

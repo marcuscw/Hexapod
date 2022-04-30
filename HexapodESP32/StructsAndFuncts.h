@@ -9,7 +9,7 @@ typedef struct {float f[3];} FLOAT3;
 
 struct Leg
 {
-  Leg(FLOAT3 _alpha, FLOAT3 _r, FLOAT3 _d)
+  Leg(FLOAT3 _alpha, FLOAT3 _r, FLOAT3 _d, FLOAT3 _servoPin)
   {
     for (int i=0; i<3; i++)
     {
@@ -19,6 +19,7 @@ struct Leg
       
       r[i] = _r.f[i];
       d[i] = _d.f[i];
+      servoPin[i] = _servoPin.f[i];
     }
   }
   
@@ -31,6 +32,7 @@ struct Leg
   
   float r[3];
   float d[3];
+  float servoPin[3];
   //////////////////////////  
 
 
@@ -52,7 +54,7 @@ float pos1[3] = {0,0,0};
 float pos2[3] = {0,0,0};
 float pos3[3] = {0,0,0};
 
-float target[3] = {200,0,0};
+float target[3] = {250,0,0};
 
   void GenerateDvm() 
   {
@@ -179,6 +181,16 @@ float target[3] = {200,0,0};
     float theta2 = (phi1 + phi2);
     float theta3 = (PI - phi3 - (PI/6));  // PI/6rad is equal to 30deg which is the offset of the servo in each leg
 
+    Serial.print(theta1);
+    Serial.print(" ");
+    Serial.print(theta2);
+    Serial.print(" ");
+    Serial.print(theta3);
+    Serial.println(" ");
+
+    theta1 = -(theta1 * (400/PI)) + 230;
+    theta2 = -(theta2 * (400/PI)) + 230;
+    theta3 = -(theta3 * (400/PI)) + 230;
 
     Serial.print(theta1);
     Serial.print(" ");
@@ -186,6 +198,11 @@ float target[3] = {200,0,0};
     Serial.print(" ");
     Serial.print(theta3);
     Serial.println(" ");
+
+    RotateJoint(servoPin[0], theta1);
+    RotateJoint(servoPin[1], theta2);
+    RotateJoint(servoPin[2], theta3);
+    
     
   }
 };
