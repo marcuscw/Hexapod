@@ -1,13 +1,6 @@
 #include "StructsAndFuncts.h"
-/*
-#include "HCPCA9685.h"
 
-#define  I2C1 0x40
-#define  I2C2 0x41
 
-HCPCA9685 A(I2C1);
-HCPCA9685 B(I2C2);
-*/
 ///////////////////////// used for voltage cut off
 int voltPin = 34;
 int alarmPin = 19;
@@ -43,13 +36,14 @@ void loop()
 {
   while (Serial.available() == 0) {}
 
-  val = Serial.parseFloat() * (PI/180);  
+  val = Serial.parseFloat(); // * (PI/180);  
   
   DetectLowVoltage(voltPin, alarmPin);
 
-  leg1.UpdateTheta(0, val);
-  leg1.UpdateTheta(1, 0);
-  leg1.UpdateTheta(2, 0);
+  //leg1.UpdateTheta(0, 0);
+  //leg1.UpdateTheta(1, 0);
+  //leg1.UpdateTheta(2, 0);
 
-  leg1.CalcFK();
+  //leg1.target[0] = val;
+  leg1.CalcIK();
 }

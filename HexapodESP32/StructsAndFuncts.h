@@ -1,12 +1,12 @@
 #pragma once
 
-/*
 #include "HCPCA9685.h"
-#define  PCA_A 0x40
-#define  PCA_B 0x41
 
-HCPCA9685 HCPCA9685(I2CAdd);
-*/
+#define  I2C1 0x40
+#define  I2C2 0x41
+
+HCPCA9685 A(I2C1);
+HCPCA9685 B(I2C2);
 
 
 
@@ -61,7 +61,7 @@ float pos1[3] = {0,0,0};
 float pos2[3] = {0,0,0};
 float pos3[3] = {0,0,0};
 
-float target[3] = {270.3,0,0};
+float target[3] = {200,0,0};
 
   void GenerateDvm() 
   {
@@ -161,6 +161,7 @@ float target[3] = {270.3,0,0};
     Serial.print(", ");
     Serial.print(pos3[2]);
     Serial.println(" ");
+
 */
   }
 
@@ -183,9 +184,10 @@ float target[3] = {270.3,0,0};
     float phi2 = atan2(l2, l1);
     float phi3 = acos((pow(r3 , 2) + pow(r2 , 2) - pow(l3 , 2)) / (2 * r3 * r2));
   
-    float theta1 = atan2(target[1], target[0]); // REVISE IK REVISE IK REVISE IK
+    float theta1 = atan2(target[1], target[0]);
     float theta2 = (phi1 + phi2);
-    float theta3 = (PI - phi3);
+    float theta3 = (PI - phi3 - (PI/6));  // PI/6rad is equal to 30deg which is the offset of the servo in each leg
+
 
     Serial.print(theta1);
     Serial.print(" ");
@@ -193,5 +195,6 @@ float target[3] = {270.3,0,0};
     Serial.print(" ");
     Serial.print(theta3);
     Serial.println(" ");
+    
   }
 };
