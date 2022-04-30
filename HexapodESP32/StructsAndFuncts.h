@@ -1,18 +1,9 @@
 #pragma once
 
-#include "HCPCA9685.h"
-
-#define  I2C1 0x40
-#define  I2C2 0x41
-
-HCPCA9685 A(I2C1);
-HCPCA9685 B(I2C2);
-
-
-
 void MatMul(float A[4][4], float B[4][4], float C[4][4]);
 void PrintMat(float mat[4][4]);
 void DetectLowVoltage(int voltPin, int alarmPin);
+void RotateJoint(int pin, float angle);
 
 typedef struct {float f[3];} FLOAT3;
 

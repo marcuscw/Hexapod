@@ -1,4 +1,11 @@
 #include "StructsAndFuncts.h"
+#include "HCPCA9685.h"
+
+#define  I2C1 0x40
+#define  I2C2 0x41
+
+HCPCA9685 pwmA(I2C1);
+HCPCA9685 pwmB(I2C2);
 
 
 ///////////////////////// used for voltage cut off
@@ -17,12 +24,12 @@ void setup()
 {
   Serial.begin(19200);
 
-  /*
-  // Initialise the library and set it to 'servo mode'
-  HCPCA9685.Init(SERVO_MODE);
-  // Wake the device up
-  HCPCA9685.Sleep(false);
-  */
+  
+  pwmA.Init(SERVO_MODE);
+  pwmA.Sleep(false);
+  pwmB.Init(SERVO_MODE);
+  pwmB.Sleep(false);
+  
   
   // Initialise the pins for reading the battery voltage and the buzzer connected to it
   pinMode(voltPin, INPUT);
@@ -34,6 +41,7 @@ void setup()
 
 void loop()
 {
+  /*
   while (Serial.available() == 0) {}
 
   val = Serial.parseFloat(); // * (PI/180);  
@@ -46,4 +54,7 @@ void loop()
 
   //leg1.target[0] = val;
   leg1.CalcIK();
+  */
+
+  RotateJoint(16, 115);
 }
