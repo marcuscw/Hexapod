@@ -4,8 +4,21 @@ void MatMul(float A[4][4], float B[4][4], float C[4][4]);
 void PrintMat(float mat[4][4]);
 void DetectLowVoltage(int voltPin, int alarmPin);
 void RotateJoint(int pin, float angle);
+void Lerp(float pos[3], float t, float start[3], float finish[3]);
+void CubicBezier(float pos[3], float t, float start[3], float controlA[3], float controlB[3], float finish[3]);
+void doAStep()
+// for --> void UpdateHyperParameters(Robot bot, Leg l1, Leg l2, Leg l3, Leg l4, Leg l5, Leg l6); --> scroll down as it references `Robot` and `Leg`
 
 typedef struct {float f[3];} FLOAT3;
+
+struct Robot
+{
+  float radius = 372.8;  // the radius of the robot from the center right to the very tip of its toe (unit: mm)
+  
+  float roll = 0;
+  float pitch = 0;
+  float yaw = 0;
+};
 
 struct Leg
 {
@@ -54,7 +67,13 @@ float pos1[3] = {0,0,0};
 float pos2[3] = {0,0,0};
 float pos3[3] = {0,0,0};
 
-float target[3] = {250,0,0};
+float target[3] = {270.3,0,0};
+
+// hyperparamters that will be updated using the UpdateHyperParameters()
+float radius = 372.8;
+float roll = 0;
+float pitch = 0;
+float yaw = 0;
 
   void GenerateDvm() 
   {
@@ -126,6 +145,9 @@ float target[3] = {250,0,0};
 
   void CalcFK()
   {
+
+    target[0] = target[0] + cos(yaw);
+    
     /*
      * calculates the forward kinematics for the leg
      */
@@ -160,7 +182,14 @@ float target[3] = {250,0,0};
 
   void CalcIK()
   {
-  
+
+    //adjust according to yaw
+    Serial.println(yaw);
+    target[0] = (radius-102.5) * cos(yaw);
+    target[2] = (radius-102.5) * sin(yaw);
+
+    Serial.println(target[0]);
+    Serial.println(target[2]);
     /*
      * calculates inverse kinematics analytically
      */
@@ -181,28 +210,34 @@ float target[3] = {250,0,0};
     float theta2 = (phi1 + phi2);
     float theta3 = (PI - phi3 - (PI/6));  // PI/6rad is equal to 30deg which is the offset of the servo in each leg
 
+    if (isnan(theta1) || isnan(theta2) || isnan(theta2))
+    {
+      Serial.println("NaN ERROR HAHA");
+      return;
+    }
+/*    
     Serial.print(theta1);
     Serial.print(" ");
     Serial.print(theta2);
     Serial.print(" ");
     Serial.print(theta3);
     Serial.println(" ");
-
-    theta1 = -(theta1 * (400/PI)) + 230;
+*/
+    theta1 = (theta1 * (400/PI)) + 230;
     theta2 = -(theta2 * (400/PI)) + 230;
     theta3 = -(theta3 * (400/PI)) + 230;
-
+/*
     Serial.print(theta1);
     Serial.print(" ");
     Serial.print(theta2);
     Serial.print(" ");
     Serial.print(theta3);
     Serial.println(" ");
-
+*/
     RotateJoint(servoPin[0], theta1);
     RotateJoint(servoPin[1], theta2);
-    RotateJoint(servoPin[2], theta3);
-    
-    
+    RotateJoint(servoPin[2], theta3); 
   }
 };
+
+void UpdateHyperParameters(Robot bot, Leg& l1, Leg& l2, Leg& l3, Leg& l4, Leg& l5, Leg& l6);
