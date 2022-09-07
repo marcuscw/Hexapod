@@ -56,35 +56,52 @@ void RotateJoint(int pin, float angle)
   delay(10);
 }
 
-void Lerp(float pos[3], float t, float start[3], float finish[3])
+void Lerp(float pos[3], float t, float start[3], float finish[3], bool offset, bool dir)
 {
-  pos[0] = start[0] + t * (finish[0] - start[0]);
-  pos[1] = start[1] + t * (finish[1] - start[1]);
-  pos[2] = start[2] + t * (finish[2] - start[2]);
+  /*
+   * offset: if true then an offset will be applied
+   * dir: if equal to 1 then direction is positive, if equal to 0 then diection is negative
+   */
+  float px = start[0] + t * (finish[0] - start[0]);
+  float py = start[1] + t * (finish[1] - start[1]);
+  float pz = start[2] + t * (finish[2] - start[2]);
+
+  if (offset) 
+  {
+    float phi;
+    
+    if (dir) {phi = PI/4;}
+    else {phi = -PI/4;}
+    
+    px = (px - start[0]) * cos(phi) - (py - start[1]) * sin(phi) + start[0];  // applying a rotation matrix across z and centering to pivot over 'start': R(pos - pivot) + pivot
+    py = (px - start[0]) * sin(phi) + (py - start[1]) * cos(phi) + start[1];
+  }
+  pos[0] = px;
+  pos[1] = py;
+  pos[2] = pz;
 }
 
-void CubicBezier(float pos[3], float t, float start[3], float controlA[3], float controlB[3], float finish[3])
+void CubicBezier(float pos[3], float t, float start[3], float controlA[3], float controlB[3], float finish[3], bool offset, bool dir)
 {
+  /*
+   * offset: if true then an offset will be applied
+   * dir: if equal to 1 then direction is positive, if equal to 0 then diection is negative
+   */
   float start_to_controlA[3];
-  Lerp(start_to_controlA, t, start, controlA);
+  Lerp(start_to_controlA, t, start, controlA, offset, dir);
   
   float controlA_to_controlB[3];
-  Lerp(controlA_to_controlB, t, controlA, controlB);
+  Lerp(controlA_to_controlB, t, controlA, controlB, offset, dir);
 
 
   float controlB_to_finish[3];
-  Lerp(controlB_to_finish, t, controlB, finish);
+  Lerp(controlB_to_finish, t, controlB, finish, offset, dir);
 
   float interpolatorA[3];
-  Lerp(interpolatorA, t, start_to_controlA, controlA_to_controlB);
+  Lerp(interpolatorA, t, start_to_controlA, controlA_to_controlB, offset, dir);
 
   float interpolatorB[3];
-  Lerp(interpolatorB, t, controlA_to_controlB, controlB_to_finish);
+  Lerp(interpolatorB, t, controlA_to_controlB, controlB_to_finish, offset, dir);
 
-  Lerp(pos, t, interpolatorA, interpolatorB);
-}
-
-void doAStep()
-{
-  stepSpeed = 0.1
+  Lerp(pos, t, interpolatorA, interpolatorB, offset, dir);
 }

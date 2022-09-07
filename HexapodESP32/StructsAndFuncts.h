@@ -4,9 +4,8 @@ void MatMul(float A[4][4], float B[4][4], float C[4][4]);
 void PrintMat(float mat[4][4]);
 void DetectLowVoltage(int voltPin, int alarmPin);
 void RotateJoint(int pin, float angle);
-void Lerp(float pos[3], float t, float start[3], float finish[3]);
-void CubicBezier(float pos[3], float t, float start[3], float controlA[3], float controlB[3], float finish[3]);
-void doAStep()
+void Lerp(float pos[3], float t, float start[3], float finish[3], bool offset=0, bool dir=1);
+void CubicBezier(float pos[3], float t, float start[3], float controlA[3], float controlB[3], float finish[3], bool offset=0, bool dir=1);
 // for --> void UpdateHyperParameters(Robot bot, Leg l1, Leg l2, Leg l3, Leg l4, Leg l5, Leg l6); --> scroll down as it references `Robot` and `Leg`
 
 typedef struct {float f[3];} FLOAT3;

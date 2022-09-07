@@ -46,11 +46,51 @@ void setup()
   leg1.GenerateDvm();
 }
 
+void TripodGait()
+{
+  /* 
+   *  when using make sure that the legs y is 0 for best results 
+   * 
+   *  ideally later make it so that the step arc starts from where the leg currently is and ends in normal spot to eliminate the possibility of the
+   *  start being messed up due to the leg starting where it left off.
+   *  
+   *  Perhaps in void setup set the leg positions to gait starting point?
+   */
+
+  
+  float start[3] = {120, -70, -180};
+  float controlA[3] = {120, 20, -70};
+  float controlB[3] = {120, -20, -70};
+  float finish[3] = {120, 70, -180};
+  
+  float stepInterval = 0.1;
+
+  float angleOff = PI/4;  // the exterior angle in an octagon which is the amount that the front and back 2 legs are offset by3
+  
+  for (int i = 0; i < 1; i += stepInterval)  // start with legs: 1, 3, 5 arcing and the rest withdrawing
+  {
+    CubicBezier(leg1.target, i, start, controlA, controlB, finish, 1, 0);
+    Lerp(leg2.target, i, start, finish);
+    CubicBezier(leg3.target, i, start, controlA, controlB, finish, 1, 1);
+    Lerp(leg4.target, i, finish, start, 1, 0);  // ONE SIDE MUST BE INVERTED AS ITS FORWARD WOULD BE THE OTHERS BACKWARDS!
+    CubicBezier(leg5.target, i, finish, controlA, controlB, start);   // ONE SIDE MUST BE INVERTED AS ITS FORWARD WOULD BE THE OTHERS BACKWARDS!
+    Lerp(leg6.target, i, finish, start, 1, 1);  // ONE SIDE MUST BE INVERTED AS ITS FORWARD WOULD BE THE OTHERS BACKWARDS!
+  }
+  for (int i = 0; i < 1; i += stepInterval)  // start with legs: 2, 4, 6 arcing and the rest withdrawing
+  {
+    Lerp(leg1.target, i, start, finish, 1, 0);
+    CubicBezier(leg2.target, i, start, controlA, start, finish);
+    Lerp(leg3.target, i, start, finish, 1, 1);  // !! sus
+    CubicBezier(leg4.target, i, start, controlA, finish, start, 1, 0);  // ONE SIDE MUST BE INVERTED AS ITS FORWARD WOULD BE THE OTHERS BACKWARDS!
+    Lerp(leg5.target, i, finish, start);   // ONE SIDE MUST BE INVERTED AS ITS FORWARD WOULD BE THE OTHERS BACKWARDS!
+    CubicBezier(leg6.target, i, start, controlA, finish, start, 1, 1);  // ONE SIDE MUST BE INVERTED AS ITS FORWARD WOULD BE THE OTHERS BACKWARDS!
+  }
+}
 
 void loop()
 {
 
- 
+ /*
   UpdateHyperParameters(robot, leg1, leg2, leg3, leg4, leg5, leg6);
   Serial.println(leg1.yaw);
   
@@ -58,86 +98,31 @@ void loop()
 
     robot.yaw = Serial.parseFloat() * (PI/180);
   //float Z = Serial.parseFloat(); // * (PI/180);  
-  
+*/
+  //TripodGait();
 
-  float X = 270.3;
-  float Y = 0;
-  float Z = 0;
+  float start[3] = {120, -70, -180};
+  float controlA[3] = {120, 20, -70};
+  float controlB[3] = {120, -20, -70};
+  float finish[3] = {120, 70, -180};
 
-  leg1.doAstep();
-  
-  leg1.target[0] = X;
-  leg1.target[1] = Y;
-  leg1.target[2] = Z;
-  leg1.CalcIK();
-
-  leg2.target[0] = X;
-  leg2.target[1] = Y;
-  leg2.target[2] = Z;
-  leg2.CalcIK();
-
-  leg3.target[0] = X;
-  leg3.target[1] = Y;
-  leg3.target[2] = Z;
-  leg3.CalcIK();
-
-  leg4.target[0] = X;
-  leg4.target[1] = Y;
-  leg4.target[2] = Z;
-  leg4.CalcIK();
-
-  leg5.target[0] = X;
-  leg5.target[1] = Y;
-  leg5.target[2] = Z;
-  leg5.CalcIK();
-
-  leg6.target[0] = X;
-  leg6.target[1] = Y;
-  leg6.target[2] = Z;
-  leg6.CalcIK();
-
-  
-
-  
-  /*
-  float start[3] = {110, 70, -120};
-  float finish[3] = {150, -70, -120};
-  float controlA[3] = {150, 10, 70};
-  float controlB[3]= {150, -10, 70};
-  
-  float pos[3];
-
-  leg1.[0] = start[0];
-  leg1.[1] = start[1];
-  leg1.[2] = start[2];
-  leg1.CalcIK();
-  
-  for (float i = 0;i <= 2;i=i+0.01)
+/*
+  for (int i = 0; i < 1; i += 0.1)
   {
-    if (i <= 1)
-    {
-      CubicBezier(pos, i, start, controlA, controlB, finish);
-      Serial.print(i);
-      Serial.print(" ");
-      Serial.print(pos[0]);
-      Serial.print(" ");
-      Serial.print(pos[1]);
-      Serial.print(" ");
-      Serial.print(pos[2]);
-      Serial.println(" ");
-      delay(10); 
-    }
-    else
-    {
-      Lerp(pos, i - 1, finish, start);
-      delay(10);
-    }
-    
-    leg1.[0] = pos[0];
-    leg1.[1] = pos[1];
-    leg1.[2] = pos[2];
-    leg1.CalcIK();
+    Lerp(leg5.target, i, start, finish);
+    leg5.CalcIK();
+    delay(100);
+  }
+  for (int i = 0; i < 1; i += 0.1)
+  {
+    Lerp(leg5.target, i, finish, start);
+    leg5.CalcIK();
+    delay(100);
   }
   */
-  
+
+  leg5.target[0] = 170;
+  leg5.target[1] = 0;
+  leg5.target[2] = 0;
+  leg5.CalcIK();
 }

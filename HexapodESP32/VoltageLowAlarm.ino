@@ -32,3 +32,40 @@ void DetectLowVoltage(int voltagePin, int alarmPin)
     digitalWrite(27, LOW);
   }
 }
+
+/*
+  float X = 120;
+  float Y = -150;
+  float Z = 0;
+ 
+  leg1.target[0] = X;
+  leg1.target[1] = Y;
+  leg1.target[2] = Z;
+  leg1.CalcIK();
+
+  leg2.target[0] = X;
+  leg2.target[1] = Y;
+  leg2.target[2] = Z;
+  leg2.CalcIK();
+
+  leg3.target[0] = X;
+  leg3.target[1] = Y;
+  leg3.target[2] = Z;
+  leg3.CalcIK();
+
+  leg4.target[0] = X;
+  leg4.target[1] = Y;
+  leg4.target[2] = Z;
+  leg4.CalcIK();
+
+  leg5.target[0] = X;
+  leg5.target[1] = Y;
+  leg5.target[2] = Z;
+  leg5.CalcIK();
+
+  leg6.target[0] = X;
+  leg6.target[1] = Y;
+  leg6.target[2] = Z;
+  leg6.CalcIK();
+
+  */
