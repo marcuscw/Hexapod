@@ -123,6 +123,6 @@ void loop()
 
   leg5.target[0] = 170;
   leg5.target[1] = 0;
-  leg5.target[2] = 0;
+  leg5.target[2] = -50;
   leg5.CalcIK();
 }

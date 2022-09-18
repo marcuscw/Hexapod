@@ -183,12 +183,13 @@ float yaw = 0;
   {
 
     //adjust according to yaw
-    Serial.println(yaw);
-    target[0] = (radius-102.5) * cos(yaw);
-    target[2] = (radius-102.5) * sin(yaw);
+    //Serial.println(yaw);
+    //target[0] = (radius-102.5) * cos(yaw);
+    //target[2] = (radius-102.5) * sin(yaw);
 
-    Serial.println(target[0]);
-    Serial.println(target[2]);
+    //Serial.println(target[0]);
+    //Serial.println(target[1]);
+    //Serial.println(target[2]);
     /*
      * calculates inverse kinematics analytically
      */
