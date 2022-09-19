@@ -6,7 +6,7 @@ void DetectLowVoltage(int voltPin, int alarmPin);
 void RotateJoint(int pin, float angle);
 void Lerp(FLOAT3& pos, float t, FLOAT3 start, FLOAT3 finish);
 void CubicBezier(FLOAT3& pos, float t, FLOAT3 start, FLOAT3 controlA, FLOAT3 controlB, FLOAT3 finish);
-FLOAT3 RotatePoint(float point[3],float pivot[3], float thetaRad);  // theta is relative to the right hand rule from pivot
+FLOAT3 RotatePoint(FLOAT3 point, FLOAT3 pivot, float thetaRad);  // theta is relative to the right hand rule from pivot
 
 // for --> void UpdateHyperParameters(Robot bot, Leg l1, Leg l2, Leg l3, Leg l4, Leg l5, Leg l6); --> scroll down as it references `Robot` and `Leg`
 

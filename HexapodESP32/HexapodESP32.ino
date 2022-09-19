@@ -56,36 +56,45 @@ void TripodGait()
    */
 
   // https://www.desmos.com/calculator/vis3zapatp
-  
-  FLOAT3 start = {190, -70, -120};
-  FLOAT3 startO = {190, -70, -120};
-  
-  FLOAT3 controlA = {190, 20, 0};
-  FLOAT3 controlAO = {140.5, -0.5, 0};
-  
-  FLOAT3 controlB = {190, -20, 0};
-  FLOAT3 controlBO = {168.8, -28.8, 0};
-  
-  FLOAT3 finish = {190, 70, -120};
-  FLOAT3 finishO = {91, 29, -120};
+
+  FLOAT3 start = {160, -60, -130};
+  FLOAT3 controlA = {160, 20, -20};
+  FLOAT3 controlB = {160, -20, -20};
+  FLOAT3 finish = {160, 60, -130};
 
   float stepInterval = 0.05;
 
-  float angleOff = PI/4;  // the exterior angle in an octagon which is the amount that the front and back 2 legs are offset by3
+  float angleOff = PI/4;  // the exterior angle in an octagon which is the amount that the front and back 2 legs are offset by 3
   
   for (float i = 0; i < 1; i += stepInterval)  // start with legs: 1, 3, 5 arcing and the rest withdrawing
   {
-    CubicBezier(leg5.target, i, start, controlA, controlB, finish);   // ONE SIDE MUST BE INVERTED AS ITS FORWARD WOULD BE THE OTHERS BACKWARDS!
+    CubicBezier(leg1.target, i, RotatePoint(finish, finish, -PI/4), RotatePoint(controlA, finish, -PI/4), RotatePoint(controlB, finish, -PI/4), RotatePoint(start, finish, -PI/4));
+    leg1.CalcIK();
+    Lerp(leg2.target, i, start, finish);
+    leg2.CalcIK();
+    CubicBezier(leg3.target, i, RotatePoint(start, start, PI/4), RotatePoint(controlA, start, PI/4), RotatePoint(controlB, start, PI/4), RotatePoint(finish, start, PI/4));
+    leg3.CalcIK();
+    Lerp(leg4.target, i, RotatePoint(finish, finish, -PI/4), start);
+    leg4.CalcIK();
+    CubicBezier(leg5.target, i, start, controlA, controlB, finish);
     leg5.CalcIK();
-    Lerp(leg6.target, i, finishO, startO);
+    Lerp(leg6.target, i, RotatePoint(finish, start, PI/4), start);
     leg6.CalcIK();
   }
   
   for (float i = 0; i < 1; i += stepInterval)  // start with legs: 2, 4, 6 arcing and the rest withdrawing
   {
-    Lerp(leg5.target, i, finish, start);   // ONE SIDE MUST BE INVERTED AS ITS FORWARD WOULD BE THE OTHERS BACKWARDS!
+    Lerp(leg1.target, i, RotatePoint(start, finish, -PI/4), RotatePoint(finish, finish, -PI/4));
+    leg1.CalcIK();
+    CubicBezier(leg2.target, i, finish, controlA, controlB, start);
+    leg2.CalcIK();
+    Lerp(leg3.target, i, RotatePoint(start, start, PI/4), RotatePoint(finish, start, PI/4));
+    leg3.CalcIK();
+    CubicBezier(leg4.target, i, start, RotatePoint(controlA, finish, -PI/4), RotatePoint(controlB, finish, -PI/4), RotatePoint(finish, finish, -PI/4));
+    leg4.CalcIK();
+    Lerp(leg5.target, i, finish, start);
     leg5.CalcIK();
-    CubicBezier(leg6.target, i, startO, controlA, controlBO, finishO);
+    CubicBezier(leg6.target, i, start, RotatePoint(controlA, start, PI/4), RotatePoint(controlB, start, PI/4), RotatePoint(finish, start, PI/4));
     leg6.CalcIK();
   }
 }
@@ -93,4 +102,9 @@ void TripodGait()
 void loop()
 {
   TripodGait();
+  
+  //leg3.target = {270.3, 0, 0};
+  //Serial.println("QUACK");
+  //leg3.CalcIK();
+  
 }
