@@ -15,13 +15,13 @@ int alarmPin = 19;
 
 Robot robot;
 
-Leg leg1({-PI/2, PI, 0},{50, 110.3, 110},{0, 0, 0}, {12,13,14});
-Leg leg2({-PI/2, PI, 0},{50, 110.3, 110},{0, 0, 0}, {8,9,10});
-Leg leg3({-PI/2, PI, 0},{50, 110.3, 110},{0, 0, 0}, {0,1,2});
+Leg leg1({50, 110.3, 110}, {12,13,14});
+Leg leg2({50, 110.3, 110}, {8,9,10});
+Leg leg3({50, 110.3, 110}, {0,1,2});
 
-Leg leg4({-PI/2, PI, 0},{50, 110.3, 110},{0, 0, 0}, {28,29,30});
-Leg leg5({-PI/2, PI, 0},{50, 110.3, 110},{0, 0, 0}, {24,25,26});
-Leg leg6({-PI/2, PI, 0},{50, 110.3, 110},{0, 0, 0}, {16,17,18});
+Leg leg4({50, 110.3, 110}, {28,29,30});
+Leg leg5({50, 110.3, 110}, {24,25,26});
+Leg leg6({50, 110.3, 110}, {16,17,18});
 
 
 
@@ -42,8 +42,6 @@ void setup()
   // Initialise the pins for reading the battery voltage and the buzzer connected to it
   pinMode(voltPin, INPUT);
   pinMode(alarmPin, OUTPUT);
-
-  leg1.GenerateDvm();
 }
 
 void TripodGait()

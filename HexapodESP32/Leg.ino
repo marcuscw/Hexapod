@@ -1,27 +1,23 @@
 #include "StructsAndFuncts.h"
 
-Leg::Leg(FLOAT3 _alpha, FLOAT3 _r, FLOAT3 _d, FLOAT3 _servoPin)
+Leg::Leg(FLOAT3 _r, FLOAT3 _servoPin)
 {
   for (int i=0; i<3; i++)
   {
-    alpha[i] = _alpha.f[i];
-    sina[i] = sin(alpha[i]);
-    cosa[i] = cos(alpha[i]);
-    
     r[i] = _r.f[i];
-    d[i] = _d.f[i];
     servoPin[i] = _servoPin.f[i];
-
-    
-    float theta[3] = {0, 0, 0};
-  
-    float alpha[3] = {0, 0, 0};
-    float cosa[3] = {0, 0, 0};
-    float sina[3] = {0, 0, 0};
     
     float r[3] = {0, 0, 0};
     float d[3] = {0, 0, 0};
     float servoPin[3] = {0, 0, 0};
+    
+    float target[3] = {270.3,0,0};
+    
+    // hyperparamters that will be updated using the UpdateHyperParameters()
+    float radius = 372.8;
+    float roll = 0;
+    float pitch = 0;
+    float yaw = 0;
   }
 }
 
