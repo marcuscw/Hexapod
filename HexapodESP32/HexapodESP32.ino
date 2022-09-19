@@ -55,85 +55,24 @@ void TripodGait()
    *  Perhaps in void setup set the leg positions to gait starting point?
    */
 
-  
-  float start[3] = {120, -70, -180};
-  float controlA[3] = {120, 20, -70};
-  float controlB[3] = {120, -20, -70};
-  float finish[3] = {120, 70, -180};
-  
-  float stepInterval = 0.1;
-
-  float angleOff = PI/4;  // the exterior angle in an octagon which is the amount that the front and back 2 legs are offset by3
-  
-  for (int i = 0; i < 1; i += stepInterval)  // start with legs: 1, 3, 5 arcing and the rest withdrawing
-  {
-    CubicBezier(leg1.target, i, start, controlA, controlB, finish);
-    Lerp(leg2.target, i, start, finish);
-    CubicBezier(leg3.target, i, start, controlA, controlB, finish);
-    Lerp(leg4.target, i, finish, start);  // ONE SIDE MUST BE INVERTED AS ITS FORWARD WOULD BE THE OTHERS BACKWARDS!
-    CubicBezier(leg5.target, i, finish, controlA, controlB, start);   // ONE SIDE MUST BE INVERTED AS ITS FORWARD WOULD BE THE OTHERS BACKWARDS!
-    Lerp(leg6.target, i, finish, start);  // ONE SIDE MUST BE INVERTED AS ITS FORWARD WOULD BE THE OTHERS BACKWARDS!
-  }
-  for (int i = 0; i < 1; i += stepInterval)  // start with legs: 2, 4, 6 arcing and the rest withdrawing
-  {
-    Lerp(leg1.target, i, start, finish);
-    CubicBezier(leg2.target, i, start, controlA, start, finish);
-    Lerp(leg3.target, i, start, finish);  // !! sus
-    CubicBezier(leg4.target, i, start, controlA, finish, start);  // ONE SIDE MUST BE INVERTED AS ITS FORWARD WOULD BE THE OTHERS BACKWARDS!
-    Lerp(leg5.target, i, finish, start);   // ONE SIDE MUST BE INVERTED AS ITS FORWARD WOULD BE THE OTHERS BACKWARDS!
-    CubicBezier(leg6.target, i, start, controlA, finish, start);  // ONE SIDE MUST BE INVERTED AS ITS FORWARD WOULD BE THE OTHERS BACKWARDS!
-  }
-}
-
-void loop()
-{
-
- /*
-  UpdateHyperParameters(robot, leg1, leg2, leg3, leg4, leg5, leg6);
-  Serial.println(leg1.yaw);
-  
-  while (Serial.available() == 0) {}
-
-    robot.yaw = Serial.parseFloat() * (PI/180);
-  //float Z = Serial.parseFloat(); // * (PI/180);  
-*/
-  //TripodGait();
-
   // https://www.desmos.com/calculator/vis3zapatp
   
-  float start[3] = {190, -70, -120};
-  float startO[3] = {190, -70, -120};
+  FLOAT3 start = {190, -70, -120};
+  FLOAT3 startO = {190, -70, -120};
   
-  float controlA[3] = {190, 20, 0};
-  float controlAO[3] = {140.5, -0.5, 0};
+  FLOAT3 controlA = {190, 20, 0};
+  FLOAT3 controlAO = {140.5, -0.5, 0};
   
-  float controlB[3] = {190, -20, 0};
-  float controlBO[3] = {168.8, -28.8, 0};
+  FLOAT3 controlB = {190, -20, 0};
+  FLOAT3 controlBO = {168.8, -28.8, 0};
   
-  float finish[3] = {190, 70, -120};
-  float finishO[3] = {91, 29, -120};
-
-  
-  Serial.print("rotated pos: ");
-  Serial.print((RotatePoint(finish,start, PI/4)).f[0]);
-  Serial.print(", ");
-  Serial.println((RotatePoint(finish,start, PI/4)).f[1]);
+  FLOAT3 finish = {190, 70, -120};
+  FLOAT3 finishO = {91, 29, -120};
 
   float stepInterval = 0.05;
 
   float angleOff = PI/4;  // the exterior angle in an octagon which is the amount that the front and back 2 legs are offset by3
-
-/*
-  for (float i = 0; i < 1; i += stepInterval)  // start with legs: 1, 3, 5 arcing and the rest withdrawing
-  {
-    Lerp(leg5.target, i, start, finish);   // ONE SIDE MUST BE INVERTED AS ITS FORWARD WOULD BE THE OTHERS BACKWARDS!
-    leg5.CalcIK();
-    Lerp(leg6.target, i, startO, finishO);
-    leg6.CalcIK();
-    delay(0.5);
-  }
-  */
-
+  
   for (float i = 0; i < 1; i += stepInterval)  // start with legs: 1, 3, 5 arcing and the rest withdrawing
   {
     CubicBezier(leg5.target, i, start, controlA, controlB, finish);   // ONE SIDE MUST BE INVERTED AS ITS FORWARD WOULD BE THE OTHERS BACKWARDS!
@@ -149,5 +88,9 @@ void loop()
     CubicBezier(leg6.target, i, startO, controlA, controlBO, finishO);
     leg6.CalcIK();
   }
-  
+}
+
+void loop()
+{
+  TripodGait();
 }
