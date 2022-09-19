@@ -1,5 +1,30 @@
 #include "StructsAndFuncts.h"
 
+Leg::Leg(FLOAT3 _alpha, FLOAT3 _r, FLOAT3 _d, FLOAT3 _servoPin)
+{
+  for (int i=0; i<3; i++)
+  {
+    alpha[i] = _alpha.f[i];
+    sina[i] = sin(alpha[i]);
+    cosa[i] = cos(alpha[i]);
+    
+    r[i] = _r.f[i];
+    d[i] = _d.f[i];
+    servoPin[i] = _servoPin.f[i];
+
+    
+    float theta[3] = {0, 0, 0};
+  
+    float alpha[3] = {0, 0, 0};
+    float cosa[3] = {0, 0, 0};
+    float sina[3] = {0, 0, 0};
+    
+    float r[3] = {0, 0, 0};
+    float d[3] = {0, 0, 0};
+    float servoPin[3] = {0, 0, 0};
+  }
+}
+
 void UpdateHyperParameters(Robot bot, Leg& l1, Leg& l2, Leg& l3, Leg& l4, Leg& l5, Leg& l6)
 {
   if (bot.radius != l1.radius)
@@ -56,7 +81,7 @@ void RotateJoint(int pin, float angle)
   delay(10);
 }
 
-void Lerp(float pos[3], float t, float start[3], float finish[3], bool offset, bool dir)
+void Lerp(float pos[3], float t, float start[3], float finish[3])
 {
   /*
    * offset: if true then an offset will be applied
@@ -65,43 +90,33 @@ void Lerp(float pos[3], float t, float start[3], float finish[3], bool offset, b
   float px = start[0] + t * (finish[0] - start[0]);
   float py = start[1] + t * (finish[1] - start[1]);
   float pz = start[2] + t * (finish[2] - start[2]);
-
-  if (offset) 
-  {
-    float phi;
-    
-    if (dir) {phi = PI/4;}
-    else {phi = -PI/4;}
-    
-    px = (px - start[0]) * cos(phi) - (py - start[1]) * sin(phi) + start[0];  // applying a rotation matrix across z and centering to pivot over 'start': R(pos - pivot) + pivot
-    py = (px - start[0]) * sin(phi) + (py - start[1]) * cos(phi) + start[1];
-  }
+  
   pos[0] = px;
   pos[1] = py;
   pos[2] = pz;
 }
 
-void CubicBezier(float pos[3], float t, float start[3], float controlA[3], float controlB[3], float finish[3], bool offset, bool dir)
+void CubicBezier(float pos[3], float t, float start[3], float controlA[3], float controlB[3], float finish[3])
 {
   /*
    * offset: if true then an offset will be applied
    * dir: if equal to 1 then direction is positive, if equal to 0 then diection is negative
    */
   float start_to_controlA[3];
-  Lerp(start_to_controlA, t, start, controlA, offset, dir);
+  Lerp(start_to_controlA, t, start, controlA);
   
   float controlA_to_controlB[3];
-  Lerp(controlA_to_controlB, t, controlA, controlB, offset, dir);
+  Lerp(controlA_to_controlB, t, controlA, controlB);
 
 
   float controlB_to_finish[3];
-  Lerp(controlB_to_finish, t, controlB, finish, offset, dir);
+  Lerp(controlB_to_finish, t, controlB, finish);
 
   float interpolatorA[3];
-  Lerp(interpolatorA, t, start_to_controlA, controlA_to_controlB, offset, dir);
+  Lerp(interpolatorA, t, start_to_controlA, controlA_to_controlB);
 
   float interpolatorB[3];
-  Lerp(interpolatorB, t, controlA_to_controlB, controlB_to_finish, offset, dir);
+  Lerp(interpolatorB, t, controlA_to_controlB, controlB_to_finish);
 
-  Lerp(pos, t, interpolatorA, interpolatorB, offset, dir);
+  Lerp(pos, t, interpolatorA, interpolatorB);
 }

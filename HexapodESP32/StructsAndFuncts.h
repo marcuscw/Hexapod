@@ -1,14 +1,16 @@
 #pragma once
 
+typedef struct {float f[3];} FLOAT3;  // data type for returning an array of 3 floats eg position
+
 void MatMul(float A[4][4], float B[4][4], float C[4][4]);
 void PrintMat(float mat[4][4]);
 void DetectLowVoltage(int voltPin, int alarmPin);
 void RotateJoint(int pin, float angle);
-void Lerp(float pos[3], float t, float start[3], float finish[3], bool offset=0, bool dir=1);
-void CubicBezier(float pos[3], float t, float start[3], float controlA[3], float controlB[3], float finish[3], bool offset=0, bool dir=1);
-// for --> void UpdateHyperParameters(Robot bot, Leg l1, Leg l2, Leg l3, Leg l4, Leg l5, Leg l6); --> scroll down as it references `Robot` and `Leg`
+void Lerp(float pos[3], float t, float start[3], float finish[3]);
+void CubicBezier(float pos[3], float t, float start[3], float controlA[3], float controlB[3], float finish[3]);
+FLOAT3 RotatePoint(float point[3],float pivot[3], float thetaRad);  // theta is relative to the right hand rule from pivot
 
-typedef struct {float f[3];} FLOAT3;
+// for --> void UpdateHyperParameters(Robot bot, Leg l1, Leg l2, Leg l3, Leg l4, Leg l5, Leg l6); --> scroll down as it references `Robot` and `Leg`
 
 struct Robot
 {
@@ -21,19 +23,7 @@ struct Robot
 
 struct Leg
 {
-  Leg(FLOAT3 _alpha, FLOAT3 _r, FLOAT3 _d, FLOAT3 _servoPin)
-  {
-    for (int i=0; i<3; i++)
-    {
-      alpha[i] = _alpha.f[i];
-      sina[i] = sin(alpha[i]);
-      cosa[i] = cos(alpha[i]);
-      
-      r[i] = _r.f[i];
-      d[i] = _d.f[i];
-      servoPin[i] = _servoPin.f[i];
-    }
-  }
+  Leg(FLOAT3 _alpha, FLOAT3 _r, FLOAT3 _d, FLOAT3 _servoPin);
   
   //////////////////////////
   float theta[3];
@@ -187,9 +177,9 @@ float yaw = 0;
     //target[0] = (radius-102.5) * cos(yaw);
     //target[2] = (radius-102.5) * sin(yaw);
 
-    //Serial.println(target[0]);
-    //Serial.println(target[1]);
-    //Serial.println(target[2]);
+    Serial.println(target[0]);
+    Serial.println(target[1]);
+    Serial.println(target[2]);
     /*
      * calculates inverse kinematics analytically
      */

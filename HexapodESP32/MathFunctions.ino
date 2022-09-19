@@ -52,6 +52,16 @@ void PrintMat(float mat[4][4])
   Serial.println("");
 }
 
+FLOAT3 RotatePoint(float point[3],float pivot[3], float thetaRad)
+{
+  float px = (point[0] - pivot[0]) * cos(thetaRad) - (point[1] - pivot[1]) * sin(thetaRad) + pivot[0];  // applying a rotation matrix across z and centering to pivot over 'start': R(pos - pivot) + pivot
+  float py = (point[0] - pivot[0]) * sin(thetaRad) + (point[1] - pivot[1]) * cos(thetaRad) + pivot[1];
+  float pz = point[2];
+
+  FLOAT3 newPoint = {px, py, pz};
+  return newPoint;
+}
+
 
 
 
