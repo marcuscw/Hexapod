@@ -8,6 +8,9 @@ For a video introduction and guide watch the videos below:
 
   - [episode 2](https://www.youtube.com/watch?v=KBEews2-PPQ)
     Here I am issuing some problems
+    
+  - [episode 3](https://www.youtube.com/watch?v=KYlweOxck5U)
+    Here I explain how it creates a smooth arc when stepping and share some footage of it walking
 
 ## Diagrams
 [in Leg.ino](https://github.com/marcuscw/Hexapod/blob/main/HexapodESP32/Leg.ino) I have code for the inverse kinematics however all the variable names are very vague so here are some diagrams to help you identify which is which.
