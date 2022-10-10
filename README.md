@@ -20,7 +20,10 @@ For a video introduction and guide watch the videos below:
   - `CAD experience` incase you wish to modify parts to your liking
   - `A soldering iron`
 ### Parts
-  - 
+  | Part  | Use |
+  | ----- | --- |
+  | Content Cell  | Content Cell  |
+  | Content Cell  | Content Cell  |
 
 
 
