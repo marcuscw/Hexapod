@@ -20,13 +20,11 @@ For a video introduction and guide watch the videos below:
   - `CAD experience` incase you wish to modify parts to your liking
   - `A soldering iron`
 ### Parts
-  | Part  | Use |
-  | ----- | --- |
-  | Content Cell  | Content Cell  |
-  | Content Cell  | Content Cell  |
-  
-  $int_{0}^{\infty} x dx$
-
+  | Part Type  | Part Name | Use |
+  | ---------- | --------- | ------- |
+  | Servo  | MG996R  |        |
+  | Microcontroller  | ESP32 |     |
+  | Servo Controller | PCA9685 | used to control up to 16 servos <br> with $\text{I}^2\text{C}$.<br>Can also be daisy chained together. |
 
 
 ## Diagrams
