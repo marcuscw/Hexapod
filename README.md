@@ -24,6 +24,8 @@ For a video introduction and guide watch the videos below:
   | ----- | --- |
   | Content Cell  | Content Cell  |
   | Content Cell  | Content Cell  |
+  
+  $int_{0}^{\infty} x dx$
 
 
 
