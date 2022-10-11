@@ -19,6 +19,7 @@ For a video introduction and guide watch the videos below:
   - `An FDM 3D Printer` (I use an ender3v2)
   - `CAD experience` incase you wish to modify parts to your liking
   - `A soldering iron`
+  - `Experience with the arduino IDE`
 ### Parts
   | Amount | Part Type  | Part Name | Note |
   |:---:| ---------- | --------- | ------- |
