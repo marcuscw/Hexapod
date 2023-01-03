@@ -25,7 +25,7 @@ void Leg::CalcIK()
   {
     /*  
      * This function withh calculate inverse kinematics analytically with the variable 'target' as it's target
-     * Diagrams for all the obscure variable names will be found on the github page
+     * Diagrams for all the vague variable names will be found on the github page's README file
      * 
      *  --see also--
      *  https://www.youtube.com/watch?v=dQw4w9WgXcQ  <-- This explains most of that is going on
@@ -54,6 +54,9 @@ void Leg::CalcIK()
     float theta2 = (phi1 + phi2);
     float theta3 = (PI - phi3 - (PI/6));  // PI/6rad is equal to 30deg which is the offset of the servo in each leg
 
+    Serial.print(theta1);
+    Serial.print(theta2);
+    Serial.println(theta3);
     if (isnan(theta1) || isnan(theta2) || isnan(theta2))
     {
       Serial.println("NaN ERROR HAHA");
@@ -97,6 +100,17 @@ void Lerp(FLOAT3& pos, float t, FLOAT3 start, FLOAT3 finish)
   pos.f[0] = px;
   pos.f[1] = py;
   pos.f[2] = pz;
+}
+
+void CalibrateLeg(Leg& leg)
+{
+  float len = leg.r[0] + leg.r[1] + leg.r[2];
+  
+  leg.target.f[0] = len - 0.01;  // if its just len then the IK will throw a nan error as 
+  leg.target.f[1] = 0;
+  leg.target.f[2] = 0;
+
+  leg.CalcIK();
 }
 
 void CubicBezier(FLOAT3& pos, float t, FLOAT3 start, FLOAT3 controlA, FLOAT3 controlB, FLOAT3 finish)

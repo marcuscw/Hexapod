@@ -27,6 +27,18 @@ FLOAT3 RotatePoint(FLOAT3 point, FLOAT3 pivot, float thetaRad)
   return newPoint;
 }
 
+FLOAT3 MeanO(FLOAT3 point1, FLOAT3 point2) 
+{
+  // returns the point directly inbetween 2 other points by finding their mean
+  
+  float px = (point1.f[0] + point2.f[0]) / 2;  // the average of the x positions
+  float py = (point1.f[1] + point2.f[1]) / 2;  // the average of the x positions
+  float pz = (point1.f[2] + point2.f[2]) / 2;
+
+  FLOAT3 newPoint = {px, py, pz};
+  return newPoint;
+}
+
 
 
 

@@ -15,15 +15,15 @@ int alarmPin = 19;
 
 Robot robot;
 
-Leg leg1({50, 110.3, 110}, {12,13,14});
-Leg leg2({50, 110.3, 110}, {8,9,10});
-Leg leg3({50, 110.3, 110}, {0,1,2});
+Leg leg1({50, 62.8, 110}, {12,13,14});
+Leg leg2({50, 62.8, 110}, {8,9,10});
+Leg leg3({50, 62.8, 110}, {0,1,2});
 
-Leg leg4({50, 110.3, 110}, {28,29,30});
-Leg leg5({50, 110.3, 110}, {24,25,26});
-Leg leg6({50, 110.3, 110}, {16,17,18});
+Leg leg4({50, 62.8, 110}, {28,29,30});
+Leg leg5({50, 62.8, 110}, {24,25,26});
+Leg leg6({50, 62.8, 110}, {16,17,18});
 
-
+float ISHOWSPEED = 0.07;
 
 
 float val;
@@ -57,54 +57,80 @@ void TripodGait()
 
   // https://www.desmos.com/calculator/vis3zapatp
 
-  FLOAT3 start = {160, -60, -130};
-  FLOAT3 controlA = {160, 20, -20};
-  FLOAT3 controlB = {160, -20, -20};
-  FLOAT3 finish = {160, 60, -130};
+  FLOAT3 Mstart = {150, 30, -130};
+  FLOAT3 McontrolA = {150, 20, -20};
+  FLOAT3 McontrolB = {150, 20, -20};
+  FLOAT3 Mfinish = {150, -30, -130};
 
-  float stepInterval = 0.05;
+  FLOAT3 Rstart = {155, 30, -130};
+  FLOAT3 RcontrolA = {155, 20, -20};
+  FLOAT3 RcontrolB = {155, -20, -20};
+  FLOAT3 Rfinish = {155, -30, -130};
+
+  FLOAT3 Fstart = {155, 30, -130};
+  FLOAT3 FcontrolA = {155, 20, -20};
+  FLOAT3 FcontrolB = {155, -20, -20};
+  FLOAT3 Ffinish = {155, -30, -130};
+
+  FLOAT3 Mpivot = MeanO(Mstart, Mfinish);
+  FLOAT3 Rpivot = MeanO(Rstart, Rfinish);
+  FLOAT3 Fpivot = MeanO(Fstart, Ffinish);
+
+  float stepInterval = ISHOWSPEED;
 
   float angleOff = PI/4;  // the exterior angle in an octagon which is the amount that the front and back 2 legs are offset by 3
-  
+
   for (float i = 0; i < 1; i += stepInterval)  // start with legs: 1, 3, 5 arcing and the rest withdrawing
   {
-    CubicBezier(leg1.target, i, RotatePoint(finish, finish, -PI/4), RotatePoint(controlA, finish, -PI/4), RotatePoint(controlB, finish, -PI/4), RotatePoint(start, finish, -PI/4));
+    Serial.println(0);
+    CubicBezier(leg1.target, i, RotatePoint(Ffinish, Fpivot, -PI/4), RotatePoint(FcontrolA, Fpivot, -PI/4), RotatePoint(FcontrolB, Fpivot, -PI/4), RotatePoint(Fstart, Fpivot, -PI/4));
     leg1.CalcIK();
-    Lerp(leg2.target, i, start, finish);
+    Lerp(leg2.target, i, Mstart, Mfinish);
     leg2.CalcIK();
-    CubicBezier(leg3.target, i, RotatePoint(start, start, PI/4), RotatePoint(controlA, start, PI/4), RotatePoint(controlB, start, PI/4), RotatePoint(finish, start, PI/4));
+    CubicBezier(leg3.target, i, RotatePoint(Rfinish, Rpivot, PI/4), RotatePoint(RcontrolA, Rpivot, PI/4), RotatePoint(RcontrolB, Rpivot, PI/4), RotatePoint(Rstart, Rpivot, PI/4));
     leg3.CalcIK();
-    Lerp(leg4.target, i, RotatePoint(finish, finish, -PI/4), start);
+    Lerp(leg4.target, i, RotatePoint(Ffinish, Fpivot, -PI/4), RotatePoint(Fstart, Fpivot, -PI/4));
     leg4.CalcIK();
-    CubicBezier(leg5.target, i, start, controlA, controlB, finish);
+    CubicBezier(leg5.target, i, Mstart, McontrolA, McontrolB, Mfinish);
     leg5.CalcIK();
-    Lerp(leg6.target, i, RotatePoint(finish, start, PI/4), start);
+    Lerp(leg6.target, i, RotatePoint(Rfinish, Rpivot, PI/4), RotatePoint(Rstart, Rpivot, PI/4));
     leg6.CalcIK();
   }
   
   for (float i = 0; i < 1; i += stepInterval)  // start with legs: 2, 4, 6 arcing and the rest withdrawing
   {
-    Lerp(leg1.target, i, RotatePoint(start, finish, -PI/4), RotatePoint(finish, finish, -PI/4));
+    Lerp(leg1.target, i, RotatePoint(Fstart, Fpivot, -PI/4), RotatePoint(Ffinish, Fpivot, -PI/4));
     leg1.CalcIK();
-    CubicBezier(leg2.target, i, finish, controlA, controlB, start);
+    CubicBezier(leg2.target, i, Mfinish, McontrolA, McontrolB, Mstart);
     leg2.CalcIK();
-    Lerp(leg3.target, i, RotatePoint(start, start, PI/4), RotatePoint(finish, start, PI/4));
+    Lerp(leg3.target, i, RotatePoint(Rstart, Rpivot, PI/4), RotatePoint(Rfinish, Rpivot, PI/4));
     leg3.CalcIK();
-    CubicBezier(leg4.target, i, start, RotatePoint(controlA, finish, -PI/4), RotatePoint(controlB, finish, -PI/4), RotatePoint(finish, finish, -PI/4));
+    CubicBezier(leg4.target, i, RotatePoint(Fstart, Fpivot, -PI/4), RotatePoint(FcontrolA, Fpivot, -PI/4), RotatePoint(FcontrolB, Fpivot, -PI/4), RotatePoint(Ffinish, Fpivot, -PI/4));
     leg4.CalcIK();
-    Lerp(leg5.target, i, finish, start);
+    Lerp(leg5.target, i, Mfinish, Mstart);
     leg5.CalcIK();
-    CubicBezier(leg6.target, i, start, RotatePoint(controlA, start, PI/4), RotatePoint(controlB, start, PI/4), RotatePoint(finish, start, PI/4));
+    CubicBezier(leg6.target, i, RotatePoint(Rstart, Rpivot, PI/4), RotatePoint(RcontrolA, Rpivot, PI/4), RotatePoint(RcontrolB, Rpivot, PI/4), RotatePoint(Rfinish, Rpivot, PI/4));
     leg6.CalcIK();
   }
 }
 
 void loop()
 {
+
+  
+  if (Serial.available() > 0) {    // is a character available?
+    ISHOWSPEED = Serial.parseFloat();
+  }
+         
+  Serial.println("RUNNING....... ");
   TripodGait();
   
-  //leg3.target = {270.3, 0, 0};
-  //Serial.println("QUACK");
-  //leg3.CalcIK();
+
+  // CalibrateLeg(leg1);
+  // CalibrateLeg(leg2);
+  // CalibrateLeg(leg3);
+  // CalibrateLeg(leg4);
+  // CalibrateLeg(leg5);
+  // CalibrateLeg(leg6);
   
 }

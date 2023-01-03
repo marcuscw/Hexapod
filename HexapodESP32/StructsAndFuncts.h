@@ -7,8 +7,9 @@ void RotateJoint(int pin, float angle);
 void Lerp(FLOAT3& pos, float t, FLOAT3 start, FLOAT3 finish);
 void CubicBezier(FLOAT3& pos, float t, FLOAT3 start, FLOAT3 controlA, FLOAT3 controlB, FLOAT3 finish);
 FLOAT3 RotatePoint(FLOAT3 point, FLOAT3 pivot, float thetaRad);  // theta is relative to the right hand rule from pivot
+FLOAT3 MeanO(FLOAT3 point1, FLOAT3 point2);
 
-// for --> void UpdateHyperParameters(Robot bot, Leg l1, Leg l2, Leg l3, Leg l4, Leg l5, Leg l6); --> scroll down as it references `Robot` and `Leg`
+// for --> void UpdateHyperParameters(...); and CalibrateLeg(...); --> scroll down as it references `Robot` and `Leg`
 
 struct Robot
 {
@@ -38,3 +39,4 @@ struct Leg
 };
 
 void UpdateHyperParameters(Robot bot, Leg& l1, Leg& l2, Leg& l3, Leg& l4, Leg& l5, Leg& l6);
+void CalibrateLeg(Leg& leg);
