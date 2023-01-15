@@ -30,14 +30,7 @@ void Leg::CalcIK()
      *  --see also--
      *  https://www.youtube.com/watch?v=dQw4w9WgXcQ  <-- This explains most of that is going on
      */
-    //adjust according to yaw
-    //Serial.println(yaw);
-    //target[0] = (radius-102.5) * cos(yaw);
-    //target[2] = (radius-102.5) * sin(yaw);
-    Serial.println(target.f[0]);
-    Serial.println(target.f[1]);
-    Serial.println(target.f[2]);
-
+     
     float r1 = r[0];
     float r2 = r[1];
     float r3 = r[2];
@@ -54,9 +47,6 @@ void Leg::CalcIK()
     float theta2 = (phi1 + phi2);
     float theta3 = (PI - phi3 - (PI/6));  // PI/6rad is equal to 30deg which is the offset of the servo in each leg
 
-    Serial.print(theta1);
-    Serial.print(theta2);
-    Serial.println(theta3);
     if (isnan(theta1) || isnan(theta2) || isnan(theta2))
     {
       Serial.println("NaN ERROR HAHA");
@@ -74,6 +64,10 @@ void Leg::CalcIK()
 
 void RotateJoint(int pin, float angle)
 {
+  if (angle < 30)
+  {
+    Serial.println("angle not reaching full potential");
+  }
   angle = constrain(angle, 30, 450);
   
   if (pin < 16)
