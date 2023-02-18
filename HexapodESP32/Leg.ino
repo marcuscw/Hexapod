@@ -34,18 +34,22 @@ void Leg::CalcIK()
     float r1 = r[0];
     float r2 = r[1];
     float r3 = r[2];
-  
-    float l1 = sqrt(pow(target.f[0] , 2) + pow(target.f[2] , 2)) - r1;
-    float l2 = target.f[2];
-    float l3 = sqrt(pow(l1 , 2) + pow(l2 , 2));
-  
-    float phi1 = acos((pow(r2 , 2) + pow(l3 , 2) - pow(r3 , 2)) / (2 * r2 * l3));
+    float x = target.f[0];
+    float y = target.f[1];
+    float z = target.f[2];
+
+    float l1 = sqrt(x * x + z * z) - r1;
+    float l2 = z;
+    float l3 = sqrt(l1 * l1 + l2 * l2);
+
+    float phi1 = acos((r2 * r2 + l3 * l3 - r3 * r3) / (2 * r2 * l3));
     float phi2 = atan2(l2, l1);
-    float phi3 = acos((pow(r3 , 2) + pow(r2 , 2) - pow(l3 , 2)) / (2 * r3 * r2));
+    float phi3 = acos((r3 * r3 + r2 * r2 - l3 * l3) / (2 * r3 * r2));
+
+    float theta1 = atan2(y, x);
+    float theta2 = phi1 + phi2;
+    float theta3 = PI - phi3 - PI / 6.0;  // PI/6rad is equal to 30deg which is the offset of the servo in each leg
   
-    float theta1 = atan2(target.f[1], target.f[0]);
-    float theta2 = (phi1 + phi2);
-    float theta3 = (PI - phi3 - (PI/6));  // PI/6rad is equal to 30deg which is the offset of the servo in each leg
 
     if (isnan(theta1) || isnan(theta2) || isnan(theta2))
     {
@@ -81,19 +85,11 @@ void RotateJoint(int pin, float angle)
   delay(10);
 }
 
-void Lerp(FLOAT3& pos, float t, FLOAT3 start, FLOAT3 finish)
+void Lerp(FLOAT3& pos, float t, const FLOAT3 start, const FLOAT3 finish)
 {
-  /*
-   * offset: if true then an offset will be applied
-   * dir: if equal to 1 then direction is positive, if equal to 0 then diection is negative
-   */
-  float px = start.f[0] + t * (finish.f[0] - start.f[0]);
-  float py = start.f[1] + t * (finish.f[1] - start.f[1]);
-  float pz = start.f[2] + t * (finish.f[2] - start.f[2]);
-  
-  pos.f[0] = px;
-  pos.f[1] = py;
-  pos.f[2] = pz;
+  for (int i = 0; i < 3; i++) {
+    pos.f[i] = start.f[i] + t * (finish.f[i] - start.f[i]);
+  }
 }
 
 void CalibrateLeg(Leg& leg)
@@ -107,12 +103,8 @@ void CalibrateLeg(Leg& leg)
   leg.CalcIK();
 }
 
-void CubicBezier(FLOAT3& pos, float t, FLOAT3 start, FLOAT3 controlA, FLOAT3 controlB, FLOAT3 finish)
+void CubicBezier(FLOAT3& pos, float t, const FLOAT3 start, const FLOAT3 controlA, const FLOAT3 controlB, FLOAT3 const finish)
 {
-  /*
-   * offset: if true then an offset will be applied
-   * dir: if equal to 1 then direction is positive, if equal to 0 then diection is negative
-   */
   FLOAT3 start_to_controlA;
   Lerp(start_to_controlA, t, start, controlA);
   

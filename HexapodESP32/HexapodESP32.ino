@@ -43,6 +43,7 @@ void setup()
   pinMode(alarmPin, OUTPUT);
 }
 
+
 FLOAT3 Mstart = {125, 30, -90}; // for the middle legs
 FLOAT3 McontrolA = {125, 20, -50};
 FLOAT3 McontrolB = {125, -20, -50};
@@ -62,12 +63,23 @@ FLOAT3 Mpivot = MeanO(Mstart, Mfinish);
 FLOAT3 Rpivot = MeanO(Rstart, Rfinish);
 FLOAT3 Fpivot = MeanO(Fstart, Ffinish);
 
+
+FLOAT3 FcontrolA_rotated = RotatePoint(FcontrolA, Fpivot, -PI/4);
+FLOAT3 FcontrolB_rotated = RotatePoint(FcontrolB, Fpivot, -PI/4);
+FLOAT3 Fstart_rotated = RotatePoint(Fstart, Fpivot, -PI/4);
+FLOAT3 Ffinish_rotated = RotatePoint(Ffinish, Fpivot, -PI/4);
+
+FLOAT3 RcontrolA_rotated = RotatePoint(RcontrolA, Rpivot, PI/4);
+FLOAT3 RcontrolB_rotated = RotatePoint(RcontrolB, Rpivot, PI/4);
+FLOAT3 Rstart_rotated = RotatePoint(Rstart, Rpivot, PI/4);
+FLOAT3 Rfinish_rotated = RotatePoint(Rfinish, Rpivot, PI/4);
+
+FLOAT3 McontrolA_rotated = RotatePoint(McontrolA, Mpivot, 0);
+FLOAT3 McontrolB_rotated = RotatePoint(McontrolB, Mpivot, 0);
+
 float stepInterval = 0.2;
 
 float angleOff = PI/4;  // the exterior angle in an octagon which is the amount that the front and back 2 legs are offset by 3
-
-
-
 void TripodGait()
 {
   /* 
@@ -83,46 +95,44 @@ void TripodGait()
 
   for (float i = 0; i < 1; i += stepInterval)  // start with legs: 1, 3, 5 arcing and the rest withdrawing
   {
-    CubicBezier(leg1.target, i, RotatePoint(Ffinish, Fpivot, -PI/4), RotatePoint(FcontrolA, Fpivot, -PI/4), RotatePoint(FcontrolB, Fpivot, -PI/4), RotatePoint(Fstart, Fpivot, -PI/4));
+    CubicBezier(leg1.target, i, Ffinish_rotated, FcontrolA_rotated, FcontrolB_rotated, Fstart_rotated);
     leg1.CalcIK();
-  
+
     Lerp(leg2.target, i, Mstart, Mfinish);
     leg2.CalcIK();
-    
-    CubicBezier(leg3.target, i, RotatePoint(Rfinish, Rpivot, PI/4), RotatePoint(RcontrolA, Rpivot, PI/4), RotatePoint(RcontrolB, Rpivot, PI/4), RotatePoint(Rstart, Rpivot, PI/4));
+
+    CubicBezier(leg3.target, i, Rfinish_rotated, RcontrolA_rotated, RcontrolB_rotated, Rstart_rotated);
     leg3.CalcIK();
-    
-    Lerp(leg4.target, i, RotatePoint(Ffinish, Fpivot, -PI/4), RotatePoint(Fstart, Fpivot, -PI/4));
+
+    Lerp(leg4.target, i, Ffinish_rotated, Fstart_rotated);
     leg4.CalcIK();
-    
-    CubicBezier(leg5.target, i, Mstart, McontrolA, McontrolB, Mfinish);
+
+    CubicBezier(leg5.target, i, Mstart, McontrolA_rotated, McontrolB_rotated, Mfinish);
     leg5.CalcIK();
-    
-    Lerp(leg6.target, i, RotatePoint(Rfinish, Rpivot, PI/4), RotatePoint(Rstart, Rpivot, PI/4));
+
+    Lerp(leg6.target, i, Rfinish_rotated, Rstart_rotated);
     leg6.CalcIK();
-    Serial.println("0");
   }
   
   for (float i = 0; i < 1; i += stepInterval)  // start with legs: 2, 4, 6 arcing and the rest withdrawing
   { 
-    Lerp(leg1.target, i, RotatePoint(Fstart, Fpivot, -PI/4), Ffinish);
+    Lerp(leg1.target, i, Fstart_rotated, Ffinish);
     leg1.CalcIK();
     
     CubicBezier(leg2.target, i, Mfinish, McontrolA, McontrolB, Mstart);
     leg2.CalcIK();
     
-    Lerp(leg3.target, i, RotatePoint(Rstart, Rpivot, PI/4), RotatePoint(Rfinish, Rpivot, PI/4));
+    Lerp(leg3.target, i, Rstart_rotated, Rfinish_rotated);
     leg3.CalcIK();
     
-    CubicBezier(leg4.target, i, RotatePoint(Fstart, Fpivot, -PI/4), RotatePoint(FcontrolA, Fpivot, -PI/4), RotatePoint(FcontrolB, Fpivot, -PI/4), RotatePoint(Ffinish, Fpivot, -PI/4));
+    CubicBezier(leg4.target, i, Fstart_rotated, FcontrolA_rotated, FcontrolB_rotated, Ffinish_rotated);
     leg4.CalcIK();
     
     Lerp(leg5.target, i, Mfinish, Mstart);
     leg5.CalcIK();
     
-    CubicBezier(leg6.target, i, RotatePoint(Rstart, Rpivot, PI/4), RotatePoint(RcontrolA, Rpivot, PI/4), RotatePoint(RcontrolB, Rpivot, PI/4), RotatePoint(Rfinish, Rpivot, PI/4));
+    CubicBezier(leg6.target, i, Rstart_rotated, RcontrolA_rotated, RcontrolB_rotated, Rfinish_rotated);
     leg6.CalcIK();
-    Serial.println("1");
   }
 }
 
@@ -130,6 +140,21 @@ float valuu = 110;
 
 void loop()
 {
+
+  int num_calculations = 25;
+
+  unsigned long start_time = millis();  
+  for (int j = 0; j < num_calculations; j++) {
+    Serial.println(j);
+    TripodGait();
+  }
+
+  unsigned long end_time = millis();
+
+  Serial.print("Time per calculation: ");
+  Serial.println((end_time - start_time) / (float) num_calculations);
+  
+  /*
   while (Serial.available() == 0){}
 
   valuu = Serial.parseFloat();
@@ -140,5 +165,5 @@ void loop()
 
   leg6.CalcIK();
  
-  
+  */
 }

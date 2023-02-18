@@ -4,8 +4,8 @@ typedef struct {float f[3];} FLOAT3;  // data type for returning an array of 3 f
 
 void DetectLowVoltage(int voltPin, int alarmPin);
 void RotateJoint(int pin, float angle);
-void Lerp(FLOAT3& pos, float t, FLOAT3 start, FLOAT3 finish);
-void CubicBezier(FLOAT3& pos, float t, FLOAT3 start, FLOAT3 controlA, FLOAT3 controlB, FLOAT3 finish);
+void Lerp(FLOAT3& pos, float t, const FLOAT3 start, const FLOAT3 finish);
+void CubicBezier(FLOAT3& pos, float t, const FLOAT3 start, const FLOAT3 controlA, const FLOAT3 controlB, const FLOAT3 finish);
 FLOAT3 RotatePoint(FLOAT3 point, FLOAT3 pivot, float thetaRad);  // theta is relative to the right hand rule from pivot
 FLOAT3 MeanO(FLOAT3 point1, FLOAT3 point2);
 
