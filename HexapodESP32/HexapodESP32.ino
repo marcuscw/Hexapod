@@ -24,8 +24,6 @@ Leg leg4({50, 62.8, 110}, {28,29,30});
 Leg leg5({50, 62.8, 110}, {24,25,26});
 Leg leg6({50, 62.8, 110}, {16,17,18});
 
-float ISHOWSPEED = 0.1;
-
 
 float val;
 
@@ -64,9 +62,10 @@ FLOAT3 Mpivot = MeanO(Mstart, Mfinish);
 FLOAT3 Rpivot = MeanO(Rstart, Rfinish);
 FLOAT3 Fpivot = MeanO(Fstart, Ffinish);
 
-float stepInterval = ISHOWSPEED;
+float stepInterval = 0.2;
 
 float angleOff = PI/4;  // the exterior angle in an octagon which is the amount that the front and back 2 legs are offset by 3
+
 
 
 void TripodGait()
@@ -101,6 +100,7 @@ void TripodGait()
     
     Lerp(leg6.target, i, RotatePoint(Rfinish, Rpivot, PI/4), RotatePoint(Rstart, Rpivot, PI/4));
     leg6.CalcIK();
+    Serial.println("0");
   }
   
   for (float i = 0; i < 1; i += stepInterval)  // start with legs: 2, 4, 6 arcing and the rest withdrawing
@@ -122,13 +122,23 @@ void TripodGait()
     
     CubicBezier(leg6.target, i, RotatePoint(Rstart, Rpivot, PI/4), RotatePoint(RcontrolA, Rpivot, PI/4), RotatePoint(RcontrolB, Rpivot, PI/4), RotatePoint(Rfinish, Rpivot, PI/4));
     leg6.CalcIK();
+    Serial.println("1");
   }
 }
 
+float valuu = 110;
+
 void loop()
 {
+  while (Serial.available() == 0){}
 
-  TripodGait();
+  valuu = Serial.parseFloat();
+  Serial.println(valuu);
+  leg6.target.f[0] = valuu;
+  leg6.target.f[1] = 0;
+  leg6.target.f[2] = -125;
+
+  leg6.CalcIK();
  
-
+  
 }
