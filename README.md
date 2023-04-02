@@ -13,6 +13,9 @@ For a video introduction and guide watch the videos below:
     
   - [episode 3](https://www.youtube.com/watch?v=KYlweOxck5U)
     Here I explain how it creates a smooth arc when stepping and share some footage of it walking
+    
+  - [episode 4](https://www.youtube.com/watch?v=BQjA6kaLKdA&t=2s&ab_channel=marcus%3Achrw)
+    Here I test it on different terrains
 
 ## Hardware
 ### Requirements
