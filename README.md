@@ -4,6 +4,8 @@ The ultimate purpose for the hexapod is to be able to walk in multiple terrains.
 I've been working on this for 2 years now and everything has been done from scratch apart from the servo control library and the IDEs used.
 The hexapod is controlled using an `ESP32` and a `PCA9685` on both sides to control all 18 servos.
 
+|[video of it walking](https://youtu.be/Dpnh4YqBjd8)|
+
 ## Hardware
 ### Requirements
   - `An FDM 3D Printer` (I use an ender3v2)
